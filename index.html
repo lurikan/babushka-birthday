@@ -1,0 +1,414 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Днём Рождения, Бабушка Тома! | 53 года</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #d63384;
+            --bg: #fff0f5;
+            --card-bg: #ffffff;
+            --text: #4a4a4a;
+            --accent: #ff9a9e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- МУЗЫКАЛЬНАЯ КНОПКА --- */
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        .music-btn.playing { animation: pulse-music 1.5s infinite; }
+        @keyframes pulse-music { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* --- HERO SECTION --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fdfbfb 100%);
+            position: relative;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: var(--primary);
+            text-shadow: 2px 2px 0px white;
+            animation: fadeInDown 1.2s ease-out;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out 0.5s forwards;
+            font-style: italic;
+        }
+
+        .age-badge {
+            margin-top: 30px;
+            background: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--primary);
+            box-shadow: 0 10px 30px rgba(214, 51, 132, 0.2);
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out 0.8s forwards;
+        }
+
+        /* --- ТАЙМЕР --- */
+        .timer-section {
+            padding: 60px 20px;
+            text-align: center;
+            background: white;
+        }
+        .timer-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .timer-item {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 100px;
+        }
+        .timer-num { font-size: 2.5rem; font-weight: 700; color: var(--primary); display: block; }
+        .timer-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- ГАЛЕРЕЯ --- */
+        .gallery-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            margin-bottom: 100px;
+            overflow: hidden;
+            transform: translateY(80px) scale(0.95);
+            opacity: 0;
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+        }
+
+        .card.visible {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .card-img-wrapper {
+            height: 700px;
+            overflow: hidden;
+            position: relative;
+            background: #eee;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            transition: transform 1.5s ease;
+        }
+
+        .card:hover img { transform: scale(1.03); }
+
+        .card-content {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .card-content h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .card-content p {
+            font-size: 1.3rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* --- ВИДЕО СЕКЦИЯ --- */
+        .video-section {
+            padding: 80px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--bg), white);
+        }
+        .video-wrapper {
+            max-width: 900px;
+            margin: 40px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        .video-wrapper iframe, .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* --- ГОЛОСОВОЕ ПОЗДРАВЛЕНИЕ --- */
+        .voice-section {
+            padding: 60px 20px;
+            text-align: center;
+            background: white;
+        }
+        .voice-card {
+            max-width: 600px;
+            margin: 30px auto;
+            background: var(--bg);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(214, 51, 132, 0.15);
+        }
+        .voice-card h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .voice-card audio {
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 50px;
+            outline: none;
+        }
+        /* Стилизация стандартного аудиоплеера */
+        audio::-webkit-media-controls-panel {
+            background: white;
+            border-radius: 50px;
+        }
+
+        /* --- ФИНАЛ --- */
+        .final-wish {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            background: white;
+        }
+        .final-wish h2 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(3rem, 7vw, 5rem);
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .heart-divider {
+            font-size: 3rem;
+            margin: 30px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes heartbeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+        @media (max-width: 768px) {
+            .card-img-wrapper { height: 450px; }
+            .timer-num { font-size: 1.8rem; }
+            .timer-item { min-width: 70px; padding: 15px; }
+            .voice-card { padding: 25px; }
+            .voice-card h3 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фоновая музыка -->
+    <audio id="bgMusic" loop>
+        <source src="file:///C:/Users/%D0%9E%D1%81%D0%B8%D0%BF/Downloads/Barbarika_-_S_Dnem_Rozhdeniya_73513282.mp3" type="audio/mpeg">
+    </audio>
+    <button class="music-btn" id="musicBtn" title="Включить музыку">🎵</button>
+
+    <header>
+        <h1>Бабушке Томе<br>от Артёмки ❤️</h1>
+        <div class="subtitle">«Самая любимая, самая родная...»</div>
+        <div class="age-badge">✨ 53 года красоты и мудрости ✨</div>
+    </header>
+
+    <section class="timer-section">
+        <h2 style="font-family:'Caveat'; font-size:2.5rem; color:var(--primary);">Сколько ты делаешь мир лучше:</h2>
+        <div class="timer-grid" id="lifeTimer">
+            <div class="timer-item"><span class="timer-num" id="years">53</span><span class="timer-label">Года</span></div>
+            <div class="timer-item"><span class="timer-num" id="days">0</span><span class="timer-label">Дней</span></div>
+            <div class="timer-item"><span class="timer-num" id="hours">0</span><span class="timer-label">Часов</span></div>
+            <div class="timer-item"><span class="timer-num" id="minutes">0</span><span class="timer-label">Минут</span></div>
+        </div>
+    </section>
+
+    <div class="gallery-container">
+        <!-- === ШАБЛОН ФОТО 1 === -->
+        <div class="card">
+            <div class="card-img-wrapper">
+                <img src="https://i.oneme.ru/i?r=BTGBPUwtwgYUeoFhO7rESmr8Ivsd97Qg9GoMC1BJLvWlNV9KaI1_o2oCD_iruJJmDsM" alt="Бабушка Тома">
+            </div>
+            <div class="card-content">
+                <h2>Невероятная элегантность</h2>
+                <p>Бабуль, в 53 ты выглядишь так, что позавидуют любые модели! Твой стиль, твоя улыбка и твой свет — это то, чем я горжусь больше всего на свете.</p>
+            </div>
+        </div>
+
+        <!-- === ШАБЛОН ФОТО 2 === -->
+        <div class="card">
+            <div class="card-img-wrapper">
+                <img src="https://i.oneme.ru/i?r=BTGBPUwtwgYUeoFhO7rESmr8bnRQD_mzU2tsy5AEIO0JrF9KaI1_o2oCD_iruJJmDsM" alt="Бабушка Тома">
+            </div>
+            <div class="card-content">
+                <h2>Тепло твоих рук</h2>
+                <p>Спасибо за каждый пирожок, за каждый совет, за каждую минуту внимания. Ты — сердце нашей семьи, и пусть оно бьётся ровно и счастливо ещё сотню лет!</p>
+            </div>
+        </div>
+
+        <!-- === ШАБЛОН ФОТО 3 === -->
+        <div class="card">
+            <div class="card-img-wrapper">
+                <img src="https://i.oneme.ru/i?r=BTGBPUwtwgYUeoFhO7rESmr8l-IJT5hNuRqKb85D90MXPF9KaI1_o2oCD_iruJJmDsM" alt="Бабушка Тома">
+            </div>
+            <div class="card-content">
+                <h2>Молодость души</h2>
+                <p>Цифры в паспорте врут! Твоя энергия, твой юмор и твоя жажда жизни вдохновляют меня каждый день. Оставайся такой же современной и классной!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Видео секция -->
+    <section class="video-section">
+        <h2 style="font-family:'Caveat'; font-size:3rem; color:var(--primary);">Моменты счастья</h2>
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?mute=1" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- 👇 ГОЛОСОВОЕ ПОЗДРАВЛЕНИЕ -->
+    <section class="voice-section">
+        <div class="voice-card">
+            <h3>🎙️ Послушай, бабуль...</h3>
+            <p style="color:#666; margin-bottom:15px;">Нажми на плеер ниже, чтобы услышать моё поздравление</p>
+            <!-- 👇 ВСТАВЬ ССЫЛКУ НА СВОЁ АУДИО (.mp3) НИЖЕ -->
+            <audio controls preload="none">
+                <source src="file:///C:/Users/%D0%9E%D1%81%D0%B8%D0%BF/Downloads/Record%20(online-voice-recorder.com)%20(2).mp3" type="audio/mpeg">
+                Ваш браузер не поддерживает аудио.
+            </audio>
+        </div>
+    </section>
+
+    <div class="final-wish" id="finalSection">
+        <div class="heart-divider">💖</div>
+        <h2>Люблю тебя бесконечно!</h2>
+        <p style="font-size:1.5rem; max-width:600px;">Пусть этот год принесёт тебе море путешествий, крепкое здоровье и столько радости, сколько звёзд на небе.</p>
+        <p style="margin-top:30px; font-weight:600; color:var(--primary);">Твой внук Артём 🎉</p>
+    </div>
+
+<script>
+    // === МУЗЫКА ===
+    const musicBtn = document.getElementById('musicBtn');
+    const audio = document.getElementById('bgMusic');
+    let isPlaying = false;
+
+    musicBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            audio.pause();
+            musicBtn.textContent = '🎵';
+            musicBtn.classList.remove('playing');
+        } else {
+            audio.volume = 0.3;
+            audio.play().catch(e => console.log('Autoplay blocked'));
+            musicBtn.textContent = '⏸️';
+            musicBtn.classList.add('playing');
+        }
+        isPlaying = !isPlaying;
+    });
+
+    // === ТАЙМЕР ЖИЗНИ ===
+    const birthDate = new Date(1973, 5, 10);
+    
+    function updateTimer() {
+        const now = new Date();
+        const diff = now - birthDate;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        
+        document.getElementById('days').textContent = days.toLocaleString();
+        document.getElementById('hours').textContent = hours;
+        document.getElementById('minutes').textContent = minutes;
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // === АНИМАЦИЯ ПОЯВЛЕНИЯ КАРТОЧЕК ===
+    const cards = document.querySelectorAll('.card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.15 });
+    cards.forEach(card => observer.observe(card));
+
+    // === КОНФЕТТИ В КОНЦЕ ===
+    const finalSection = document.getElementById('finalSection');
+    let confettiFired = false;
+    const finalObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !confettiFired) {
+            confettiFired = true;
+            const duration = 3000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#d63384', '#ff9a9e', '#ffd700'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#d63384', '#ff9a9e', '#ffd700'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    });
+    finalObserver.observe(finalSection);
+</script>
+</body>
+</html>
