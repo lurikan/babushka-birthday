@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -171,25 +171,36 @@
             margin: 0 auto;
         }
 
-        /* --- ВИДЕО СЕКЦИЯ --- */
+        /* --- СЕКЦИЯ С 3 ФОТО (Бывшая видео) --- */
         .video-section {
             padding: 80px 20px;
             text-align: center;
             background: linear-gradient(to bottom, var(--bg), white);
         }
-        .video-wrapper {
-            max-width: 900px;
+        .photo-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1000px;
             margin: 40px auto;
+            flex-wrap: wrap;
+        }
+        .grid-item {
+            flex: 1;
+            min-width: 250px;
+            height: 300px;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            aspect-ratio: 16/9;
-            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
-        .video-wrapper iframe, .video-wrapper video {
+        .grid-item:hover {
+            transform: translateY(-10px);
+        }
+        .grid-item img {
             width: 100%;
             height: 100%;
-            border: none;
+            object-fit: cover;
         }
 
         /* --- ГОЛОСОВОЕ ПОЗДРАВЛЕНИЕ --- */
@@ -257,6 +268,14 @@
             .timer-item { min-width: 70px; padding: 15px; }
             .voice-card { padding: 25px; }
             .voice-card h3 { font-size: 2rem; }
+            .photo-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .grid-item {
+                width: 100%;
+                max-width: 350px;
+            }
         }
     </style>
 </head>
@@ -319,11 +338,25 @@
         </div>
     </div>
 
-    <!-- Видео секция -->
+    <!-- Секция "Моменты счастья" (3 фото) -->
     <section class="video-section">
         <h2 style="font-family:'Caveat'; font-size:3rem; color:var(--primary);">Моменты счастья</h2>
-        <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?mute=1" allowfullscreen></iframe>
+        
+        <div class="photo-grid">
+            <!-- Фото 1 -->
+            <div class="grid-item">
+                <img src="photo1.jpg" alt="Момент 1">
+            </div>
+            
+            <!-- Фото 2 -->
+            <div class="grid-item">
+                <img src="photo2.jpg" alt="Момент 2">
+            </div>
+            
+            <!-- Фото 3 -->
+            <div class="grid-item">
+                <img src="photo3.jpg" alt="Момент 3">
+            </div>
         </div>
     </section>
 
